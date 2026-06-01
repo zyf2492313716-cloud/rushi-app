@@ -98,3 +98,4 @@ lib/generated_plugin_registrant.dart
 
 # FVM (Flutter Version Management)
 .fvm/
+releases/
