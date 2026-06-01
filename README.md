@@ -1,6 +1,6 @@
 # 如释 (Rushi App)
 
-一款帮助膀胱害羞症（Paruresis / Shy Bladder）患者的 Android 辅助工具。
+一款帮助膀胱害羞症（Paruresis / Shy Bladder）患者的跨平台辅助工具，支持 Android、iOS 和 macOS。
 
 > **"如释"** — 取自"如释重负"，寓意帮助用户在如厕时放松身心，摆脱焦虑。
 
@@ -22,11 +22,14 @@
 
 ## 技术栈
 
-- **Flutter** — 跨平台 UI 框架
-- **Provider** — 状态管理
-- **高德地图 SDK** — 地图与定位服务
-- **audioplayers** — 音频播放
-- **shared_preferences** — 本地数据存储
+| 技术 | 用途 | 支持平台 |
+|------|------|---------|
+| **Flutter** | 跨平台 UI 框架 | Android / iOS / macOS |
+| **Provider** | 状态管理 | 全平台 |
+| **audioplayers** | 音频播放 | 全平台 |
+| **geolocator** | GPS 定位 | 全平台 |
+| **shared_preferences** | 本地数据存储 | 全平台 |
+| **permission_handler** | 权限管理 | 全平台 |
 
 ## 下载与安装
 
@@ -44,42 +47,47 @@ flutter pub get
 flutter run
 ```
 
-### 方式二：直接下载 APK（推荐用户）
+### 方式二：直接下载（推荐用户）
 
 **最新版本**: [v1.0.0](https://github.com/zyf2492313716-cloud/rushi-app/releases/tag/v1.0.0)
 
-| 版本 | 下载链接 | 大小 | 日期 |
+| 平台 | 下载链接 | 大小 | 日期 |
 |------|---------|------|------|
-| v1.0.0 | [rushi-app-v1.0.0.apk](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.0.0/rushi-app-v1.0.0.apk) | 48MB | 2026-06-02 |
+| Android (APK) | [rushi-app-v1.0.0.apk](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.0.0/rushi-app-v1.0.0.apk) | 48MB | 2026-06-02 |
+| iOS (需自编译) | 源码编译 | - | 2026-06-02 |
+| macOS (需自编译) | 源码编译 | - | 2026-06-02 |
 
-**安装步骤**:
+**Android 安装步骤**:
 1. 下载 APK 文件到手机
 2. 开启「允许安装未知来源应用」（设置 → 安全 → 未知来源）
 3. 点击 APK 文件安装
 
+**iOS/macOS 安装步骤**:
+1. 在 Mac 上安装 [Xcode](https://developer.apple.com/xcode/)（约 15GB）
+2. 克隆项目并进入目录
+3. 运行 `flutter build ios --release`（iOS）或 `flutter build macos --release`（macOS）
+4. iOS 需要 Apple Developer 账号签名后才能安装到真机
+5. macOS 编译后可直接在 `build/macos/Build/Products/Release/` 找到 `.app` 文件
+
 ## 开发环境要求
 
-| 工具 | 版本要求 |
-|------|---------|
-| Flutter SDK | >= 3.0.0 |
-| Dart SDK | >= 3.0.0 |
-| Android SDK | >= API 35 |
-| Android Studio | 最新稳定版 |
-| JDK | >= 17 |
+| 工具 | 版本要求 | 必需平台 |
+|------|---------|---------|
+| Flutter SDK | >= 3.0.0 | 全平台 |
+| Dart SDK | >= 3.0.0 | 全平台 |
+| Android SDK | >= API 35 | Android |
+| Android Studio | 最新稳定版 | Android |
+| JDK | >= 17 | Android |
+| Xcode | >= 15.0 | iOS / macOS |
+| CocoaPods | 最新版 | iOS / macOS |
 
-### 高德地图 API Key 配置
+### iOS / macOS 额外配置
 
-本项目使用高德地图 SDK，需要配置 API Key：
+项目已配置好所有必要的权限声明（位置、麦克风等），编译时 CocoaPods 会自动安装依赖。只需确保：
 
-1. 访问 [高德开放平台](https://lbs.amap.com/) 注册账号
-2. 创建应用，获取 Android SDK Key
-3. 在 `android/app/src/main/AndroidManifest.xml` 中添加：
-
-```xml
-<meta-data
-    android:name="com.amap.api.v2.apikey"
-    android:value="你的高德Key" />
-```
+1. macOS 上已安装 Xcode 和 Command Line Tools
+2. 运行 `sudo gem install cocoapods` 安装 CocoaPods
+3. 首次编译时 CocoaPods 会自动下载 iOS 依赖
 
 ## 项目结构
 
@@ -114,11 +122,13 @@ lib/
 ### 待办事项
 
 - [ ] 添加数据统计与进度图表
-- [ ] 完善地图功能（实时定位、导航）
+- [ ] 完善地图功能（实时定位、导航、Apple MapKit 集成）
 - [ ] 添加更多白噪音类型
 - [ ] GET 训练数据持久化
 - [ ] 多语言支持
 - [ ] 用户反馈与社区功能
+- [ ] App Store 上架（iOS）
+- [ ] Mac App Store 上架（macOS）
 
 ## 免责声明
 
