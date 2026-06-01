@@ -44,13 +44,18 @@ flutter pub get
 flutter run
 ```
 
-### 方式二：下载 APK（待发布）
+### 方式二：直接下载 APK（推荐用户）
 
-目前项目处于开发阶段，正式版 APK 将在功能完善后通过以下渠道发布：
-- GitHub Releases
-- 国内应用市场
+**最新版本**: [v1.0.0](https://github.com/zyf2492313716-cloud/rushi-app/releases/tag/v1.0.0)
 
-> 如需测试版 APK，请在 Issues 中留言或联系开发者。
+| 版本 | 下载链接 | 大小 | 日期 |
+|------|---------|------|------|
+| v1.0.0 | [rushi-app-v1.0.0.apk](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.0.0/rushi-app-v1.0.0.apk) | 48MB | 2026-06-02 |
+
+**安装步骤**:
+1. 下载 APK 文件到手机
+2. 开启「允许安装未知来源应用」（设置 → 安全 → 未知来源）
+3. 点击 APK 文件安装
 
 ## 开发环境要求
 
