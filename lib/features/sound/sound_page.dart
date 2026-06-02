@@ -80,11 +80,8 @@ class _SoundPageState extends State<SoundPage> {
 
   Future<void> _stopSound() async {
     await _audioPlayer.stop();
-    setState(() {
-      _playingId = null;
-      _selectedMinutes = null;
-    });
     _timer?.cancel();
+    setState(() => _playingId = null);
   }
 
   void _startTimer() {
