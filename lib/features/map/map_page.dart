@@ -1,52 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimens.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/models/toilet_marker.dart';
 import '../../core/widgets/safety_rating.dart';
+import '../../providers/toilet_provider.dart';
 
-class ToiletMapPage extends StatefulWidget {
+class ToiletMapPage extends StatelessWidget {
   const ToiletMapPage({super.key});
 
   @override
-  State<ToiletMapPage> createState() => _ToiletMapPageState();
-}
-
-class _ToiletMapPageState extends State<ToiletMapPage> {
-  final List<ToiletMarker> _toilets = [
-    const ToiletMarker(
-      id: '1',
-      name: '商场三楼卫生间',
-      address: 'XX商场三楼东侧',
-      latitude: 39.9042,
-      longitude: 116.4074,
-      safetyRating: 4,
-      comment: '很干净，有独立马桶间',
-    ),
-    const ToiletMarker(
-      id: '2',
-      name: '地铁站卫生间',
-      address: 'XX地铁站A口',
-      latitude: 39.9050,
-      longitude: 116.4080,
-      safetyRating: 2,
-      comment: '人比较多，小便池无隔板',
-    ),
-    const ToiletMarker(
-      id: '3',
-      name: '咖啡店厕所',
-      address: 'XX咖啡店内',
-      latitude: 39.9035,
-      longitude: 116.4065,
-      safetyRating: 5,
-      comment: '单间，有门锁，非常安静',
-    ),
-  ];
-
-  int _nextId = 4;
-
-  @override
   Widget build(BuildContext context) {
+    final toilets = context.watch<ToiletProvider>().toilets;
+
     return Scaffold(
       appBar: AppBar(title: const Text(AppStrings.mapTitle)),
       body: Column(
@@ -94,7 +61,7 @@ class _ToiletMapPageState extends State<ToiletMapPage> {
             ),
           ),
           Expanded(
-            child: _toilets.isEmpty
+            child: toilets.isEmpty
                 ? Center(
                     child: Text(
                       '还没有收藏的厕所',
@@ -103,9 +70,9 @@ class _ToiletMapPageState extends State<ToiletMapPage> {
                   )
                 : ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: AppDimens.md),
-                    itemCount: _toilets.length,
+                    itemCount: toilets.length,
                     itemBuilder: (context, index) {
-                      final toilet = _toilets[index];
+                      final toilet = toilets[index];
                       return Card(
                         margin: const EdgeInsets.only(bottom: AppDimens.sm),
                         child: Padding(
@@ -225,17 +192,15 @@ class _ToiletMapPageState extends State<ToiletMapPage> {
                       onPressed: () {
                         final name = nameCtrl.text.trim();
                         if (name.isEmpty) return;
-                        setState(() {
-                          _toilets.add(ToiletMarker(
-                            id: '${_nextId++}',
-                            name: name,
-                            address: addressCtrl.text.trim(),
-                            latitude: 0,
-                            longitude: 0,
-                            safetyRating: rating,
-                            comment: commentCtrl.text.trim(),
-                          ));
-                        });
+                        context.read<ToiletProvider>().add(ToiletMarker(
+                          id: DateTime.now().millisecondsSinceEpoch.toString(),
+                          name: name,
+                          address: addressCtrl.text.trim(),
+                          latitude: 0,
+                          longitude: 0,
+                          safetyRating: rating,
+                          comment: commentCtrl.text.trim(),
+                        ));
                         Navigator.pop(ctx);
                       },
                       style: ElevatedButton.styleFrom(

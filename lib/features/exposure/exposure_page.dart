@@ -1,48 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimens.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/models/exposure_level.dart';
+import '../../providers/exposure_provider.dart';
 import '../../router.dart';
-
-List<ExposureLevel> _initLevels() => [
-  const ExposureLevel(
-    id: '1',
-    title: AppStrings.levelHome,
-    description: AppStrings.levelHomeDesc,
-    difficulty: Difficulty.easy,
-  ),
-  const ExposureLevel(
-    id: '2',
-    title: AppStrings.levelDoorClosed,
-    description: AppStrings.levelDoorClosedDesc,
-    difficulty: Difficulty.easy,
-  ),
-  const ExposureLevel(
-    id: '3',
-    title: AppStrings.levelPublicEmpty,
-    description: AppStrings.levelPublicEmptyDesc,
-    difficulty: Difficulty.medium,
-  ),
-  const ExposureLevel(
-    id: '4',
-    title: AppStrings.levelPublicSomeone,
-    description: AppStrings.levelPublicSomeoneDesc,
-    difficulty: Difficulty.medium,
-  ),
-  const ExposureLevel(
-    id: '5',
-    title: AppStrings.levelUrinal,
-    description: AppStrings.levelUrinalDesc,
-    difficulty: Difficulty.hard,
-  ),
-  const ExposureLevel(
-    id: '6',
-    title: AppStrings.levelBusy,
-    description: AppStrings.levelBusyDesc,
-    difficulty: Difficulty.hard,
-  ),
-];
 
 String _difficultyLabel(Difficulty d) {
   switch (d) {
@@ -66,31 +29,12 @@ Color _difficultyColor(Difficulty d) {
   }
 }
 
-class ExposurePage extends StatefulWidget {
+class ExposurePage extends StatelessWidget {
   const ExposurePage({super.key});
 
   @override
-  State<ExposurePage> createState() => _ExposurePageState();
-}
-
-class _ExposurePageState extends State<ExposurePage> {
-  List<ExposureLevel> _levels = _initLevels();
-
-  void _onExerciseResult(String levelId, bool success) {
-    if (!success) return;
-    setState(() {
-      _levels = _levels.map((l) {
-        if (l.id == levelId && !l.isCompleted) {
-          return l.copyWith(isCompleted: true);
-        }
-        return l;
-      }).toList();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final levels = _levels;
+    final levels = context.watch<ExposureProvider>().levels;
 
     return Scaffold(
       appBar: AppBar(title: const Text(AppStrings.exposureTrain)),
@@ -112,8 +56,8 @@ class _ExposurePageState extends State<ExposurePage> {
                         AppRoutes.exercise,
                         arguments: {'levelId': level.id},
                       );
-                      if (result == true && mounted) {
-                        _onExerciseResult(level.id, true);
+                      if (result == true && context.mounted) {
+                        context.read<ExposureProvider>().markCompleted(level.id);
                       }
                     }
                   : null,
@@ -121,7 +65,7 @@ class _ExposurePageState extends State<ExposurePage> {
                 padding: const EdgeInsets.all(AppDimens.md),
                 child: Row(
                   children: [
-                    _buildLevelBadge(index + 1, level.isCompleted),
+                    _buildLevelBadge(level),
                     const SizedBox(width: AppDimens.md),
                     Expanded(
                       child: Column(
@@ -181,13 +125,14 @@ class _ExposurePageState extends State<ExposurePage> {
     );
   }
 
-  Widget _buildLevelBadge(int number, bool completed) {
+  Widget _buildLevelBadge(ExposureLevel level) {
+    final number = int.tryParse(level.id) ?? 0;
     return Container(
       width: 40,
       height: 40,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: completed
+        color: level.isCompleted
             ? AppColors.success
             : AppColors.primary.withValues(alpha: 0.1),
       ),
@@ -195,7 +140,7 @@ class _ExposurePageState extends State<ExposurePage> {
         child: Text(
           '$number',
           style: TextStyle(
-            color: completed ? Colors.white : AppColors.primary,
+            color: level.isCompleted ? Colors.white : AppColors.primary,
             fontWeight: FontWeight.w600,
           ),
         ),
