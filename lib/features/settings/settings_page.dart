@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimens.dart';
 import '../../core/constants/app_strings.dart';
+import '../../providers/app_settings_provider.dart';
+import '../../providers/exposure_provider.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<AppSettingsProvider>();
+
     return Scaffold(
       appBar: AppBar(title: const Text(AppStrings.settings)),
       body: ListView(
@@ -18,13 +23,19 @@ class SettingsPage extends StatelessWidget {
               context,
               Icons.dark_mode_outlined,
               '深色模式',
-              trailing: Switch(value: false, onChanged: (_) {}),
+              trailing: Switch(
+                value: settings.isDarkMode,
+                onChanged: (v) => settings.setDarkMode(v),
+              ),
             ),
             _buildTile(
               context,
               Icons.notifications_outlined,
               '通知提醒',
-              trailing: Switch(value: true, onChanged: (_) {}),
+              trailing: Switch(
+                value: settings.notificationsEnabled,
+                onChanged: (v) => settings.setNotifications(v),
+              ),
             ),
           ]),
           const SizedBox(height: AppDimens.sm),
@@ -33,13 +44,38 @@ class SettingsPage extends StatelessWidget {
               context,
               Icons.delete_outline,
               '清除训练记录',
-              onTap: () {},
+              onTap: () async {
+                final ok = await showDialog<bool>(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text('确认清除'),
+                    content: const Text('将清除所有暴露训练记录，此操作不可撤销。'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx, false),
+                        child: const Text('取消'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx, true),
+                        child: const Text('清除', style: TextStyle(color: AppColors.error)),
+                      ),
+                    ],
+                  ),
+                );
+                if (ok == true && context.mounted) {
+                  context.read<ExposureProvider>().clearAll();
+                }
+              },
             ),
             _buildTile(
               context,
               Icons.file_download_outlined,
               '导出数据',
-              onTap: () {},
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('导出功能将在后续版本上线')),
+                );
+              },
             ),
           ]),
           const SizedBox(height: AppDimens.sm),
@@ -65,7 +101,7 @@ class SettingsPage extends StatelessWidget {
             _buildTile(
               context,
               Icons.code,
-              '${AppStrings.version} 1.1.0',
+              '${AppStrings.version} 1.2.0',
             ),
           ]),
           const SizedBox(height: AppDimens.lg),
@@ -126,7 +162,7 @@ class SettingsPage extends StatelessWidget {
     showAboutDialog(
       context: context,
       applicationName: AppStrings.appName,
-      applicationVersion: '1.1.0',
+      applicationVersion: '1.2.0',
       applicationLegalese: AppStrings.disclaimer,
       children: [
         const SizedBox(height: 16),
