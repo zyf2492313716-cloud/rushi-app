@@ -55,7 +55,7 @@ flutter run
 |------|---------|------|------|
 | Android (APK) | [rushi-app-v1.3.0.apk](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.3.0/rushi-app-v1.3.0.apk) | 52MB | 2026-06-02 |
 | iOS (需签名安装) | [rushi-app-ios-v1.3.0.zip](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.3.0/rushi-app-ios-v1.3.0.zip) | 9.8MB | 2026-06-02 |
-| macOS | [rushi-app-macos-v1.3.0.zip](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.3.0/rushi-app-macos-v1.3.0.zip) | 18MB | 2026-06-02 |
+| macOS | [rushi-app-macos-v1.3.0.dmg](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.3.0/rushi-app-macos-v1.3.0.dmg) | 19MB | 2026-06-02 |
 
 **Android 安装步骤**:
 1. 下载 APK 文件到手机
@@ -63,15 +63,16 @@ flutter run
 3. 点击 APK 文件安装
 
 **macOS 安装**:
-1. 下载 `rushi-app-macos-v1.3.0.zip`
-2. 解压后，将 `rushi_app.app` 拖到「应用程序」文件夹
+1. 下载 `rushi-app-macos-v1.3.0.dmg`
+2. 双击打开，将 `rushi_app.app` 拖到「应用程序」文件夹
 3. 首次运行需在「系统设置 → 隐私与安全性」中允许打开
 
-**iOS 安装**（需签名）:
-1. 下载 `rushi-app-ios-v1.3.0.zip`
-2. 解压后，在 Mac 上打开 Xcode → Window → Devices and Simulators
-3. 连接 iPhone，将 `Runner.app` 拖到设备列表中自动签名安装
-4. 或在 Xcode 中用你的 Apple ID 签名后安装
+**iOS 安装**（需 Apple ID 签名）:
+1. 下载 `rushi-app-ios-v1.3.0.zip`，解压得到 `Runner.app`
+2. 用 Xcode 打开项目：`open ios/Runner.xcworkspace`
+3. 在 Signing & Capabilities 中选择你的 Apple ID 团队
+4. 连接 iPhone，按 Cmd+R 运行（自动签名安装）
+5. 或 Xcode → Window → Devices，将 `Runner.app` 拖到设备列表
 
 ## 开发环境要求
 
