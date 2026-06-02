@@ -49,25 +49,29 @@ flutter run
 
 ### 方式二：直接下载（推荐用户）
 
-**最新版本**: [v1.2.0](https://github.com/zyf2492313716-cloud/rushi-app/releases/tag/v1.2.0)
+**最新版本**: [v1.3.0](https://github.com/zyf2492313716-cloud/rushi-app/releases/tag/v1.3.0)
 
 | 平台 | 下载链接 | 大小 | 日期 |
 |------|---------|------|------|
-| Android (APK) | [rushi-app-v1.2.0.apk](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.2.0/app-release.apk) | 52MB | 2026-06-02 |
+| Android (APK) | [rushi-app-v1.3.0.apk](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.3.0/rushi-app-v1.3.0.apk) | 52MB | 2026-06-02 |
+| macOS | [rushi-app-macos-v1.3.0.zip](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.3.0/rushi-app-macos-v1.3.0.zip) | 18MB | 2026-06-02 |
 | iOS (需自编译) | 源码编译 | - | 2026-06-02 |
-| macOS (需自编译) | 源码编译 | - | 2026-06-02 |
 
 **Android 安装步骤**:
 1. 下载 APK 文件到手机
 2. 开启「允许安装未知来源应用」（设置 → 安全 → 未知来源）
 3. 点击 APK 文件安装
 
-**iOS/macOS 安装步骤**:
-1. 在 Mac 上安装 [Xcode](https://developer.apple.com/xcode/)（约 15GB）
+**macOS 安装**:
+1. 下载 `rushi-app-macos-v1.3.0.zip`
+2. 解压后，将 `rushi_app.app` 拖到「应用程序」文件夹
+3. 首次运行需在「系统设置 → 隐私与安全性」中允许打开
+
+**iOS 编译**（暂无预编译 IPA）:
+1. 在 Mac 上安装 [Xcode](https://developer.apple.com/xcode/)
 2. 克隆项目并进入目录
-3. 运行 `flutter build ios --release`（iOS）或 `flutter build macos --release`（macOS）
-4. iOS 需要 Apple Developer 账号签名后才能安装到真机
-5. macOS 编译后可直接在 `build/macos/Build/Products/Release/` 找到 `.app` 文件
+3. 运行 `flutter build ios --release --no-codesign`
+4. 需 Apple Developer 账号签名后安装到真机
 
 ## 开发环境要求
 
