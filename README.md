@@ -49,11 +49,11 @@ flutter run
 
 ### 方式二：直接下载（推荐用户）
 
-**最新版本**: [v1.0.0](https://github.com/zyf2492313716-cloud/rushi-app/releases/tag/v1.0.0)
+**最新版本**: [v1.1.0](https://github.com/zyf2492313716-cloud/rushi-app/releases/tag/v1.1.0)
 
 | 平台 | 下载链接 | 大小 | 日期 |
 |------|---------|------|------|
-| Android (APK) | [rushi-app-v1.0.0.apk](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.0.0/rushi-app-v1.0.0.apk) | 48MB | 2026-06-02 |
+| Android (APK) | [rushi-app-v1.1.0.apk](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.1.0/rushi-app-v1.1.0.apk) | 51MB | 2026-06-02 |
 | iOS (需自编译) | 源码编译 | - | 2026-06-02 |
 | macOS (需自编译) | 源码编译 | - | 2026-06-02 |
 
