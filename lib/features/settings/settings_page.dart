@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimens.dart';
 import '../../core/constants/app_strings.dart';
 import '../../providers/app_settings_provider.dart';
 import '../../providers/exposure_provider.dart';
+import '../../services/update_service.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -104,8 +106,14 @@ class SettingsPage extends StatelessWidget {
             ),
             _buildTile(
               context,
+              Icons.system_update_outlined,
+              '检查更新',
+              onTap: () => _checkUpdate(context),
+            ),
+            _buildTile(
+              context,
               Icons.code,
-              '${AppStrings.version} 1.3.0',
+              '${AppStrings.version} ${UpdateService.currentVersion}',
             ),
           ]),
           const SizedBox(height: AppDimens.lg),
@@ -162,11 +170,74 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
+  Future<void> _checkUpdate(BuildContext context) async {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      const SnackBar(content: Text('正在检查更新...')),
+    );
+
+    final info = await UpdateService().checkForUpdate();
+
+    if (!context.mounted) return;
+
+    if (!info.hasUpdate) {
+      scaffold.hideCurrentSnackBar();
+      scaffold.showSnackBar(
+        SnackBar(content: Text('当前已是最新版本 (${info.latestVersion})')),
+      );
+      return;
+    }
+
+    scaffold.hideCurrentSnackBar();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('发现新版本'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('最新版本: ${info.latestVersion}'),
+            if (info.releaseNotes != null && info.releaseNotes!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  info.releaseNotes!,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('以后再说'),
+          ),
+          if (info.downloadUrl != null)
+            FilledButton(
+              onPressed: () async {
+                Navigator.pop(ctx);
+                final uri = Uri.parse(info.downloadUrl!);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                } else {
+                  scaffold.showSnackBar(
+                    const SnackBar(content: Text('无法打开下载链接')),
+                  );
+                }
+              },
+              child: const Text('下载更新'),
+            ),
+        ],
+      ),
+    );
+  }
+
   void _showAboutDialog(BuildContext context) {
     showAboutDialog(
       context: context,
       applicationName: AppStrings.appName,
-      applicationVersion: '1.3.0',
+      applicationVersion: UpdateService.currentVersion,
       applicationLegalese: AppStrings.disclaimer,
       children: [
         const SizedBox(height: 16),

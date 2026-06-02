@@ -19,6 +19,7 @@
 | **厕所地图** | 标记并记录不同厕所的安心程度，帮助找到最适合的如厕环境 |
 | **GET 暴露训练** | 基于渐进式暴露疗法的系统化训练方案，从易到难逐步克服焦虑 |
 | **深色模式** | 支持浅色/深色主题切换，护眼省电 |
+| **在线更新** | 自动检测 GitHub Release 新版，一键下载更新 APK |
 
 ## 技术栈
 
@@ -49,11 +50,13 @@ flutter run
 
 ### 方式二：直接下载（推荐用户）
 
-**最新版本**: [v1.3.0](https://github.com/zyf2492313716-cloud/rushi-app/releases/tag/v1.3.0)
+**最新版本**: [v1.4.0](https://github.com/zyf2492313716-cloud/rushi-app/releases/tag/v1.4.0)
+
+> App 内设置页 → 关于 → 检查更新，可直接检测新版并下载。
 
 | 平台 | 下载链接 | 大小 | 日期 |
 |------|---------|------|------|
-| Android (APK) | [rushi-app-v1.3.0.apk](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.3.0/rushi-app-v1.3.0.apk) | 52MB | 2026-06-02 |
+| Android (APK) | [rushi-app-v1.4.0.apk](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.4.0/rushi-app-v1.4.0.apk) | 53MB | 2026-06-02 |
 | iOS (需签名安装) | [rushi-app-ios-v1.3.0.zip](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.3.0/rushi-app-ios-v1.3.0.zip) | 9.8MB | 2026-06-02 |
 | macOS | [rushi-app-macos-v1.3.0.dmg](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.3.0/rushi-app-macos-v1.3.0.dmg) | 19MB | 2026-06-02 |
 
@@ -66,6 +69,8 @@ flutter run
 1. 下载 `rushi-app-macos-v1.3.0.dmg`
 2. 双击打开，将 `rushi_app.app` 拖到「应用程序」文件夹
 3. 首次运行需在「系统设置 → 隐私与安全性」中允许打开
+
+> 以后新版本可在 App 内「设置 → 检查更新」一键下载 APK。macOS/iOS 版本暂不在此更新范围内。
 
 **iOS 安装**（需 Apple ID 签名）:
 1. 下载 `rushi-app-ios-v1.3.0.zip`，解压得到 `Runner.app`
@@ -117,13 +122,19 @@ lib/
 
 ## 更新日志
 
-### v1.2.0 (2026-06-02)
-- 引入 Provider 状态管理，统一数据流
-- 深色模式开关正式生效（设置可记忆）
-- 暴露训练进度持久化（SharedPreferences，重启不丢失）
-- 厕所数据持久化（JSON 序列化）
-- 清除训练记录带确认对话框
-- 修复之前版本的所有已知 Bug
+### v1.4.0 (2026-06-02)
+- 新增 GitHub 在线更新检查（设置 → 关于 → 检查更新）
+- App 内发现新版时弹窗提示，一键下载 APK
+- 版本号动态读取，与 pubspec.yaml 同步
+- 新增依赖：http、url_launcher
+- 修复：设置页 Mac 构建 Thin Binary 脚本兼容性
+
+### v1.3.0 (2026-06-02)
+- 整合全平台构建脚本（Android / iOS / macOS）
+- 完善 iOS / macOS 安全区域适配
+- 应用图标生成全平台尺寸
+- 优化音频资源加载
+- 修复深色模式状态栏颜色
 
 ### v1.1.0 (2026-06-02)
 - 新增声音辅助模块（7种白噪音/自然音效）
@@ -149,14 +160,14 @@ lib/
 
 ### 待办事项
 
-- [ ] GET 训练进度持久化（SQLite / SharedPreferences）
+- [x] GET 训练进度持久化（SharedPreferences）
+- [x] 添加 Provider 状态管理统一数据流
+- [x] App 内更新检查（GitHub Release API）
 - [ ] 地图功能完善（高德地图 / Apple MapKit 集成）
 - [ ] 暴露训练数据统计与进度图表
+- [ ] 账号登录与云端同步
 - [ ] 添加更多白噪音类型
-- [ ] 添加 Provider 状态管理统一数据流
 - [ ] 多语言支持（英文/日文）
-- [ ] App Store / Google Play 上架
-- [ ] 用户反馈与社区功能
 
 ## 免责声明
 
