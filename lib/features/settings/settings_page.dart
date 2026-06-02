@@ -105,7 +105,7 @@ class SettingsPage extends StatelessWidget {
             _buildTile(
               context,
               Icons.code,
-              '${AppStrings.version} 1.2.0',
+              '${AppStrings.version} 1.3.0',
             ),
           ]),
           const SizedBox(height: AppDimens.lg),
@@ -166,7 +166,7 @@ class SettingsPage extends StatelessWidget {
     showAboutDialog(
       context: context,
       applicationName: AppStrings.appName,
-      applicationVersion: '1.2.0',
+      applicationVersion: '1.3.0',
       applicationLegalese: AppStrings.disclaimer,
       children: [
         const SizedBox(height: 16),
