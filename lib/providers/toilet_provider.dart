@@ -27,6 +27,12 @@ class ToiletProvider extends ChangeNotifier {
     await _save();
   }
 
+  Future<void> remove(String id) async {
+    _toilets.removeWhere((t) => t.id == id);
+    notifyListeners();
+    await _save();
+  }
+
   Future<void> _save() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = jsonEncode(_toilets.map((e) => e.toJson()).toList());
