@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimens.dart';
 import '../../core/constants/app_strings.dart';
@@ -59,6 +61,54 @@ class SoundPage extends StatefulWidget {
 class _SoundPageState extends State<SoundPage> {
   String? _playingId;
   int? _selectedMinutes;
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  Timer? _timer;
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  Future<void> _playSound(SoundItem sound) async {
+    await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+    await _audioPlayer.play(AssetSource(sound.assetPath));
+    setState(() => _playingId = sound.id);
+    _startTimer();
+  }
+
+  Future<void> _stopSound() async {
+    await _audioPlayer.stop();
+    setState(() {
+      _playingId = null;
+      _selectedMinutes = null;
+    });
+    _timer?.cancel();
+  }
+
+  void _startTimer() {
+    _timer?.cancel();
+    if (_selectedMinutes != null) {
+      _timer = Timer(Duration(minutes: _selectedMinutes!), () {
+        _stopSound();
+      });
+    }
+  }
+
+  void _onSoundTap(SoundItem sound) {
+    if (_playingId == sound.id) {
+      _stopSound();
+    } else {
+      if (_playingId != null) _stopSound();
+      _playSound(sound);
+    }
+  }
+
+  void _onTimerChanged(int? minutes) {
+    setState(() => _selectedMinutes = minutes);
+    if (_playingId != null) _startTimer();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,11 +128,7 @@ class _SoundPageState extends State<SoundPage> {
                   margin: const EdgeInsets.only(bottom: AppDimens.sm),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(AppDimens.cardRadius),
-                    onTap: () {
-                      setState(() {
-                        _playingId = _playingId == sound.id ? null : sound.id;
-                      });
-                    },
+                    onTap: () => _onSoundTap(sound),
                     child: Padding(
                       padding: const EdgeInsets.all(AppDimens.md),
                       child: Row(
@@ -174,7 +220,7 @@ class _SoundPageState extends State<SoundPage> {
           ),
         );
       }).toList(),
-      onChanged: (v) => setState(() => _selectedMinutes = v),
+      onChanged: (v) => _onTimerChanged(v),
     );
   }
 }
