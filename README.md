@@ -49,11 +49,11 @@ flutter run
 
 ### 方式二：直接下载（推荐用户）
 
-**最新版本**: [v1.1.0](https://github.com/zyf2492313716-cloud/rushi-app/releases/tag/v1.1.0)
+**最新版本**: [v1.2.0](https://github.com/zyf2492313716-cloud/rushi-app/releases/tag/v1.2.0)
 
 | 平台 | 下载链接 | 大小 | 日期 |
 |------|---------|------|------|
-| Android (APK) | [rushi-app-v1.1.0.apk](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.1.0/rushi-app-v1.1.0.apk) | 51MB | 2026-06-02 |
+| Android (APK) | [rushi-app-v1.2.0.apk](https://github.com/zyf2492313716-cloud/rushi-app/releases/download/v1.2.0/app-release.apk) | 52MB | 2026-06-02 |
 | iOS (需自编译) | 源码编译 | - | 2026-06-02 |
 | macOS (需自编译) | 源码编译 | - | 2026-06-02 |
 
@@ -112,6 +112,14 @@ lib/
 ```
 
 ## 更新日志
+
+### v1.2.0 (2026-06-02)
+- 引入 Provider 状态管理，统一数据流
+- 深色模式开关正式生效（设置可记忆）
+- 暴露训练进度持久化（SharedPreferences，重启不丢失）
+- 厕所数据持久化（JSON 序列化）
+- 清除训练记录带确认对话框
+- 修复之前版本的所有已知 Bug
 
 ### v1.1.0 (2026-06-02)
 - 新增声音辅助模块（7种白噪音/自然音效）
