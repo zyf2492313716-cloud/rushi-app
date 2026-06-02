@@ -189,6 +189,7 @@ class SettingsPage extends StatelessWidget {
     }
 
     scaffold.hideCurrentSnackBar();
+    final url = info.platformUrl;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -198,6 +199,20 @@ class SettingsPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('最新版本: ${info.latestVersion}'),
+            const SizedBox(height: 8),
+            Text('当前平台: ${info.platformName}',
+                style: Theme.of(context).textTheme.bodySmall),
+            if (url == null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  '当前平台暂无可用安装包，请从 GitHub Release 手动下载。',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: AppColors.textSecondary),
+                ),
+              ),
             if (info.releaseNotes != null && info.releaseNotes!.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 12),
@@ -213,11 +228,11 @@ class SettingsPage extends StatelessWidget {
             onPressed: () => Navigator.pop(ctx),
             child: const Text('以后再说'),
           ),
-          if (info.downloadUrl != null)
+          if (url != null)
             FilledButton(
               onPressed: () async {
                 Navigator.pop(ctx);
-                final uri = Uri.parse(info.downloadUrl!);
+                final uri = Uri.parse(url);
                 if (await canLaunchUrl(uri)) {
                   await launchUrl(uri, mode: LaunchMode.externalApplication);
                 } else {
@@ -226,7 +241,7 @@ class SettingsPage extends StatelessWidget {
                   );
                 }
               },
-              child: const Text('下载更新'),
+              child: Text('下载 ${info.platformName}'),
             ),
         ],
       ),

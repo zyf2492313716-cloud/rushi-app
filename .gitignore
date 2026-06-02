@@ -101,3 +101,6 @@ lib/generated_plugin_registrant.dart
 # FVM (Flutter Version Management)
 .fvm/
 releases/
+
+# 构建产物（macOS/Android/iOS 包）只放本地 dist/，不入库
+dist/

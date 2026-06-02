@@ -70,7 +70,7 @@ flutter run
 2. 双击打开，将 `rushi_app.app` 拖到「应用程序」文件夹
 3. 首次运行需在「系统设置 → 隐私与安全性」中允许打开
 
-> 以后新版本可在 App 内「设置 → 检查更新」一键下载 APK。macOS/iOS 版本暂不在此更新范围内。
+> 以后新版本可在 App 内「设置 → 检查更新」一键下载对应平台的安装包（Android 下 APK，macOS 下 DMG）。
 
 **iOS 安装**（需 Apple ID 签名）:
 1. 下载 `rushi-app-ios-v1.3.0.zip`，解压得到 `Runner.app`

@@ -1,18 +1,33 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class UpdateInfo {
   final bool hasUpdate;
   final String latestVersion;
-  final String? downloadUrl;
+  final String? androidUrl;
+  final String? macOSUrl;
   final String? releaseNotes;
 
   UpdateInfo({
     required this.hasUpdate,
     required this.latestVersion,
-    this.downloadUrl,
+    this.androidUrl,
+    this.macOSUrl,
     this.releaseNotes,
   });
+
+  String? get platformUrl {
+    if (Platform.isAndroid) return androidUrl;
+    if (Platform.isMacOS) return macOSUrl;
+    return androidUrl;
+  }
+
+  String get platformName {
+    if (Platform.isAndroid) return 'APK';
+    if (Platform.isMacOS) return 'DMG';
+    return '安装包';
+  }
 }
 
 class UpdateService {
@@ -42,12 +57,12 @@ class UpdateService {
 
       final assets = data['assets'] as List? ?? [];
       String? apkUrl;
+      String? dmgUrl;
       for (final asset in assets) {
         final name = asset['name'] as String? ?? '';
-        if (name.endsWith('.apk')) {
-          apkUrl = asset['browser_download_url'] as String?;
-          break;
-        }
+        final url = asset['browser_download_url'] as String?;
+        if (name.endsWith('.apk')) apkUrl = url;
+        if (name.endsWith('.dmg')) dmgUrl = url;
       }
 
       final body = data['body'] as String?;
@@ -55,7 +70,8 @@ class UpdateService {
       return UpdateInfo(
         hasUpdate: _isNewerVersion(latestVer, currentVersion),
         latestVersion: latestVer,
-        downloadUrl: apkUrl,
+        androidUrl: apkUrl,
+        macOSUrl: dmgUrl,
         releaseNotes: body,
       );
     } catch (_) {
