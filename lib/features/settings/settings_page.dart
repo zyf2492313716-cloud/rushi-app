@@ -90,13 +90,17 @@ class SettingsPage extends StatelessWidget {
               context,
               Icons.privacy_tip_outlined,
               AppStrings.privacy,
-              onTap: () {},
+              onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('隐私政策将在后续版本上线')),
+              ),
             ),
             _buildTile(
               context,
               Icons.feedback_outlined,
               AppStrings.feedback,
-              onTap: () {},
+              onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('意见反馈功能将在后续版本上线')),
+              ),
             ),
             _buildTile(
               context,

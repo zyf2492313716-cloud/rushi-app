@@ -108,6 +108,13 @@ class ToiletMapPage extends StatelessWidget {
                                     color: AppColors.secondary),
                                 onPressed: () {},
                               ),
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline,
+                                    color: AppColors.error),
+                                onPressed: () => context
+                                    .read<ToiletProvider>()
+                                    .remove(toilet.id),
+                              ),
                             ],
                           ),
                         ),

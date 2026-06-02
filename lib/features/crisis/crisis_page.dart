@@ -44,6 +44,7 @@ class _CrisisPageState extends State<CrisisPage>
       _isDone = false;
       _secondsRemaining = 120;
     });
+    _fadeController.reset();
     _fadeController.forward();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_secondsRemaining <= 1) {
