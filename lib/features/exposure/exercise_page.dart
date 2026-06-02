@@ -18,6 +18,7 @@ class _ExercisePageState extends State<ExercisePage>
     with SingleTickerProviderStateMixin {
   bool _isExercising = false;
   bool _isCompleted = false;
+  bool _isSuccess = false;
   int _seconds = 0;
   Timer? _timer;
   late AnimationController _pulseController;
@@ -58,6 +59,7 @@ class _ExercisePageState extends State<ExercisePage>
     setState(() {
       _isExercising = false;
       _isCompleted = true;
+      _isSuccess = success;
     });
   }
 
@@ -219,16 +221,18 @@ class _ExercisePageState extends State<ExercisePage>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            _isCompleted
+            _isSuccess
                 ? Icons.celebration_outlined
                 : Icons.refresh,
             size: 72,
-            color: AppColors.success,
+            color: _isSuccess ? AppColors.success : AppColors.error,
           ),
           const SizedBox(height: AppDimens.xl),
           Text(
-            '练习完成',
-            style: Theme.of(context).textTheme.headlineMedium,
+            _isSuccess ? '练习完成' : '未成功',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              color: _isSuccess ? null : AppColors.error,
+            ),
           ),
           const SizedBox(height: AppDimens.sm),
           Text(
@@ -241,7 +245,10 @@ class _ExercisePageState extends State<ExercisePage>
             children: [
               OutlinedButton(
                 onPressed: () {
-                  setState(() => _isCompleted = false);
+                  setState(() {
+                    _isCompleted = false;
+                    _isSuccess = false;
+                  });
                 },
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.primary,
@@ -257,7 +264,7 @@ class _ExercisePageState extends State<ExercisePage>
               ),
               const SizedBox(width: AppDimens.md),
               ElevatedButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.pop(context, _isSuccess),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.success,
                   foregroundColor: Colors.white,

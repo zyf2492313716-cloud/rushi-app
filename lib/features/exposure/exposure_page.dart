@@ -5,7 +5,7 @@ import '../../core/constants/app_strings.dart';
 import '../../core/models/exposure_level.dart';
 import '../../router.dart';
 
-final List<ExposureLevel> _levels = [
+List<ExposureLevel> _initLevels() => [
   const ExposureLevel(
     id: '1',
     title: AppStrings.levelHome,
@@ -66,8 +66,27 @@ Color _difficultyColor(Difficulty d) {
   }
 }
 
-class ExposurePage extends StatelessWidget {
+class ExposurePage extends StatefulWidget {
   const ExposurePage({super.key});
+
+  @override
+  State<ExposurePage> createState() => _ExposurePageState();
+}
+
+class _ExposurePageState extends State<ExposurePage> {
+  List<ExposureLevel> _levels = _initLevels();
+
+  void _onExerciseResult(String levelId, bool success) {
+    if (!success) return;
+    setState(() {
+      _levels = _levels.map((l) {
+        if (l.id == levelId && !l.isCompleted) {
+          return l.copyWith(isCompleted: true);
+        }
+        return l;
+      }).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,12 +106,15 @@ class ExposurePage extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(AppDimens.cardRadius),
               onTap: isUnlocked
-                  ? () {
-                      Navigator.pushNamed(
+                  ? () async {
+                      final result = await Navigator.pushNamed(
                         context,
                         AppRoutes.exercise,
                         arguments: {'levelId': level.id},
                       );
+                      if (result == true && mounted) {
+                        _onExerciseResult(level.id, true);
+                      }
                     }
                   : null,
               child: Padding(
