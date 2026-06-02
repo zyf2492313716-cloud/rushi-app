@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'providers/app_settings_provider.dart';
 import 'theme.dart';
@@ -10,6 +11,14 @@ class RushiaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<AppSettingsProvider>();
+
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness:
+            settings.isDarkMode ? Brightness.light : Brightness.dark,
+      ),
+    );
 
     return MaterialApp(
       title: '如释',
