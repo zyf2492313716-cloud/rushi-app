@@ -5,36 +5,6 @@ import '../../core/constants/app_strings.dart';
 import '../../core/models/toilet_marker.dart';
 import '../../core/widgets/safety_rating.dart';
 
-List<ToiletMarker> _mockToilets = [
-  const ToiletMarker(
-    id: '1',
-    name: '商场三楼卫生间',
-    address: 'XX商场三楼东侧',
-    latitude: 39.9042,
-    longitude: 116.4074,
-    safetyRating: 4,
-    comment: '很干净，有独立马桶间',
-  ),
-  const ToiletMarker(
-    id: '2',
-    name: '地铁站卫生间',
-    address: 'XX地铁站A口',
-    latitude: 39.9050,
-    longitude: 116.4080,
-    safetyRating: 2,
-    comment: '人比较多，小便池无隔板',
-  ),
-  const ToiletMarker(
-    id: '3',
-    name: '咖啡店厕所',
-    address: 'XX咖啡店内',
-    latitude: 39.9035,
-    longitude: 116.4065,
-    safetyRating: 5,
-    comment: '单间，有门锁，非常安静',
-  ),
-];
-
 class ToiletMapPage extends StatefulWidget {
   const ToiletMapPage({super.key});
 
@@ -43,10 +13,40 @@ class ToiletMapPage extends StatefulWidget {
 }
 
 class _ToiletMapPageState extends State<ToiletMapPage> {
+  final List<ToiletMarker> _toilets = [
+    const ToiletMarker(
+      id: '1',
+      name: '商场三楼卫生间',
+      address: 'XX商场三楼东侧',
+      latitude: 39.9042,
+      longitude: 116.4074,
+      safetyRating: 4,
+      comment: '很干净，有独立马桶间',
+    ),
+    const ToiletMarker(
+      id: '2',
+      name: '地铁站卫生间',
+      address: 'XX地铁站A口',
+      latitude: 39.9050,
+      longitude: 116.4080,
+      safetyRating: 2,
+      comment: '人比较多，小便池无隔板',
+    ),
+    const ToiletMarker(
+      id: '3',
+      name: '咖啡店厕所',
+      address: 'XX咖啡店内',
+      latitude: 39.9035,
+      longitude: 116.4065,
+      safetyRating: 5,
+      comment: '单间，有门锁，非常安静',
+    ),
+  ];
+
+  int _nextId = 4;
+
   @override
   Widget build(BuildContext context) {
-    final toilets = _mockToilets;
-
     return Scaffold(
       appBar: AppBar(title: const Text(AppStrings.mapTitle)),
       body: Column(
@@ -66,7 +66,7 @@ class _ToiletMapPageState extends State<ToiletMapPage> {
                     style: TextStyle(color: Colors.grey[500]),
                   ),
                   Text(
-                    '预计在 v1.1 版本上线',
+                    '预计在后续版本上线',
                     style: TextStyle(
                       color: Colors.grey[400],
                       fontSize: 12,
@@ -94,7 +94,7 @@ class _ToiletMapPageState extends State<ToiletMapPage> {
             ),
           ),
           Expanded(
-            child: toilets.isEmpty
+            child: _toilets.isEmpty
                 ? Center(
                     child: Text(
                       '还没有收藏的厕所',
@@ -103,9 +103,9 @@ class _ToiletMapPageState extends State<ToiletMapPage> {
                   )
                 : ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: AppDimens.md),
-                    itemCount: toilets.length,
+                    itemCount: _toilets.length,
                     itemBuilder: (context, index) {
-                      final toilet = toilets[index];
+                      final toilet = _toilets[index];
                       return Card(
                         margin: const EdgeInsets.only(bottom: AppDimens.sm),
                         child: Padding(
@@ -154,6 +154,11 @@ class _ToiletMapPageState extends State<ToiletMapPage> {
   }
 
   void _showAddToiletDialog(BuildContext context) {
+    final nameCtrl = TextEditingController();
+    final addressCtrl = TextEditingController();
+    final commentCtrl = TextEditingController();
+    int rating = 3;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -161,66 +166,93 @@ class _ToiletMapPageState extends State<ToiletMapPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (ctx) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: AppDimens.lg,
-            right: AppDimens.lg,
-            top: AppDimens.lg,
-            bottom: MediaQuery.of(ctx).viewInsets.bottom + AppDimens.lg,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppStrings.addToilet,
-                style: Theme.of(ctx).textTheme.titleLarge,
+        return StatefulBuilder(
+          builder: (ctx, setDialogState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                left: AppDimens.lg,
+                right: AppDimens.lg,
+                top: AppDimens.lg,
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + AppDimens.lg,
               ),
-              const SizedBox(height: AppDimens.md),
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: AppStrings.toiletName,
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: AppDimens.sm),
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: AppStrings.toiletAddress,
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: AppDimens.md),
-              Text(AppStrings.safetyRating),
-              const SizedBox(height: AppDimens.sm),
-              SafetyRating(rating: 3),
-              const SizedBox(height: AppDimens.md),
-              TextField(
-                maxLines: 3,
-                decoration: const InputDecoration(
-                  labelText: AppStrings.addComment,
-                  border: OutlineInputBorder(),
-                  alignLabelWithHint: true,
-                ),
-              ),
-              const SizedBox(height: AppDimens.lg),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pop(ctx),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    AppStrings.addToilet,
+                    style: Theme.of(ctx).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: AppDimens.md),
+                  TextField(
+                    controller: nameCtrl,
+                    decoration: const InputDecoration(
+                      labelText: AppStrings.toiletName,
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                  child: const Text(AppStrings.save),
-                ),
+                  const SizedBox(height: AppDimens.sm),
+                  TextField(
+                    controller: addressCtrl,
+                    decoration: const InputDecoration(
+                      labelText: AppStrings.toiletAddress,
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: AppDimens.md),
+                  Text(AppStrings.safetyRating),
+                  const SizedBox(height: AppDimens.sm),
+                  SafetyRating(
+                    rating: rating,
+                    size: 32,
+                    interactive: true,
+                    onChanged: (v) => setDialogState(() => rating = v),
+                  ),
+                  const SizedBox(height: AppDimens.md),
+                  TextField(
+                    controller: commentCtrl,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                      labelText: AppStrings.addComment,
+                      border: OutlineInputBorder(),
+                      alignLabelWithHint: true,
+                    ),
+                  ),
+                  const SizedBox(height: AppDimens.lg),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final name = nameCtrl.text.trim();
+                        if (name.isEmpty) return;
+                        setState(() {
+                          _toilets.add(ToiletMarker(
+                            id: '${_nextId++}',
+                            name: name,
+                            address: addressCtrl.text.trim(),
+                            latitude: 0,
+                            longitude: 0,
+                            safetyRating: rating,
+                            comment: commentCtrl.text.trim(),
+                          ));
+                        });
+                        Navigator.pop(ctx);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(AppStrings.save),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

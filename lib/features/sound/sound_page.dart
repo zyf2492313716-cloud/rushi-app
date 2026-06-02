@@ -91,7 +91,7 @@ class _SoundPageState extends State<SoundPage> {
     _timer?.cancel();
     if (_selectedMinutes != null) {
       _timer = Timer(Duration(minutes: _selectedMinutes!), () {
-        _stopSound();
+        if (mounted) _stopSound();
       });
     }
   }
@@ -100,8 +100,7 @@ class _SoundPageState extends State<SoundPage> {
     if (_playingId == sound.id) {
       _stopSound();
     } else {
-      if (_playingId != null) _stopSound();
-      _playSound(sound);
+      _stopSound().then((_) => _playSound(sound));
     }
   }
 

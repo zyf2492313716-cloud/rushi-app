@@ -5,12 +5,14 @@ class SafetyRating extends StatelessWidget {
   final int rating;
   final double size;
   final bool interactive;
+  final ValueChanged<int>? onChanged;
 
   const SafetyRating({
     super.key,
     this.rating = 0,
     this.size = 28,
     this.interactive = false,
+    this.onChanged,
   });
 
   @override
@@ -19,12 +21,17 @@ class SafetyRating extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: List.generate(5, (index) {
         final filled = index < rating;
-        return Padding(
-          padding: const EdgeInsets.only(right: 2),
-          child: Icon(
-            filled ? Icons.shield : Icons.shield_outlined,
-            size: size,
-            color: filled ? _getColor(index) : Colors.grey[300],
+        return GestureDetector(
+          onTap: interactive && onChanged != null
+              ? () => onChanged!(index + 1)
+              : null,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 2),
+            child: Icon(
+              filled ? Icons.shield : Icons.shield_outlined,
+              size: size,
+              color: filled ? _getColor(index) : Colors.grey[300],
+            ),
           ),
         );
       }),
